@@ -32,7 +32,7 @@ winetools=$basedir/tools
 silent=--silent
 makeflags="--no-print-directory $silent -j$(nproc)"
 
-android_ndk=android-ndk-r21d
+android_ndk=android-ndk-r22b
 llvm_mingw=llvm-mingw-20201020-ucrt-ubuntu-18.04
 gradle=gradle-3.5.1
 png=libpng-1.6.37
@@ -56,7 +56,7 @@ release=$1
 download ()
 {
     test -d $downloads || mkdir -p $downloads
-    test -f $downloads/$(basename $2) || wget -O $downloads/$(basename $2) ${3:-$2}
+    test -f $downloads/$(basename $2) || wget -nv -O $downloads/$(basename $2) ${3:-$2}
     rm -rf $1
     case $2 in
         *.zip)
@@ -215,9 +215,9 @@ config_wine_tools ()
 
 config_box86 ()
 {
-    git clone --depth 1 https://github.com/ptitSeb/box86
+    git clone https://github.com/Seas0/box86 -b android-linux-comp
     mkdir box86/build
-    (cd box86/build && cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DANDROID=1 -DNOLOADADDR=1 -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=../../$android_ndk/build/cmake/android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=$android_api && make)
+    (cd box86/build && cmake .. -DCMAKE_BUILD_TYPE=Release -DANDROID=1 -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=../../$android_ndk/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=$android_api -DANDROID_ARM_NEON=ON -DCMAKE_C_FLAGS="-Wno-absolute-value -Wno-incompatible-pointer-types -Wno-parentheses-equality -Wno-dangling-else -Wno-pointer-sign -Wno-pointer-type-mismatch -Wno-parentheses -Wno-switch -Wno-format -fdiagnostics-color=always -DANDROID" && make -j`nproc`)
 }
 
 config_wine ()
@@ -373,3 +373,4 @@ host=i686-linux-android
 PATH=$default_path:$basedir/$llvm_mingw/bin:$basedir/$gradle/bin:$basedir/$arch/toolchain/bin
 run_configure="./configure $silent --host=$host PKG_CONFIG=false"
 install_all)
+ls -Al
