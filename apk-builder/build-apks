@@ -217,7 +217,7 @@ config_box86 ()
 {
     git clone https://github.com/Seas0/box86 -b android-linux-comp
     mkdir box86/build
-    (cd box86/build && cmake .. -DCMAKE_BUILD_TYPE=Release -DANDROID=1 -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=../../$android_ndk/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=$android_api -DANDROID_ARM_NEON=ON -DCMAKE_C_FLAGS="-Wno-absolute-value -Wno-incompatible-pointer-types -Wno-parentheses-equality -Wno-dangling-else -Wno-pointer-sign -Wno-pointer-type-mismatch -Wno-parentheses -Wno-switch -Wno-format -fdiagnostics-color=always -DANDROID" && make -j`nproc`)
+    (cd box86/build && cmake .. -DCMAKE_BUILD_TYPE=Release -DANDROID=1 -NOLOADADDR=1 -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=../../$android_ndk/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=$android_api -DANDROID_ARM_NEON=ON -DCMAKE_C_FLAGS="-Wno-absolute-value -Wno-incompatible-pointer-types -Wno-parentheses-equality -Wno-dangling-else -Wno-pointer-sign -Wno-pointer-type-mismatch -Wno-parentheses -Wno-switch -Wno-format -fdiagnostics-color=always -DANDROID" && make -j`nproc`)
 }
 
 config_wine ()
